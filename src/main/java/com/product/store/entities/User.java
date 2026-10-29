@@ -34,6 +34,10 @@ public class User {
     @Builder.Default
     private List<Address> addresses = new ArrayList<>();
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public void addAddress(Address address) {
         addresses.add(address);
         address.setUser(this);
