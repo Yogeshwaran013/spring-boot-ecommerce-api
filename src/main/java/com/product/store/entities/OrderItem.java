@@ -1,10 +1,9 @@
 package com.product.store.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
 
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name="order_items")
+@NoArgsConstructor
 public class OrderItem {
 
     @Id
@@ -24,7 +24,7 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name="product_id",nullable = false)
+    @JoinColumn(name="product_id")
     private Product product;
 
     @Column(name = "unit_price")
@@ -35,4 +35,12 @@ public class OrderItem {
 
     @Column(name="total_price")
     private BigDecimal totalPrice;
+
+    public OrderItem(Order order, Product product, Integer quantity) {
+        this.order = order;
+        this.product = product;
+        this.quanity = quantity;
+        this.unitPrice = product.getPrice();
+        this.totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+    }
 }

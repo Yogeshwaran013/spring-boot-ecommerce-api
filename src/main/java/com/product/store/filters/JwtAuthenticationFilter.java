@@ -32,10 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var token = authHeader.replace("Bearer ","");
         var jwt = jwtService.parseToken(token);
 
-        if(jwt==null || !jwt.isExpired()){
+
+        if(jwt==null || jwt.isExpired()){
             filterChain.doFilter(request,response);
             return;
         }
+
 
         var authentication = new UsernamePasswordAuthenticationToken(
                 jwt.getUserId(),
@@ -44,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request)
         );
+
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
